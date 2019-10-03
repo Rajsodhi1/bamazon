@@ -11,7 +11,9 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log("Welcome to Beach City Traders!");
+    console.log("Welcome to Beach City Traders!")
+
+    console.log("##########################################")
     // console.log("   _____ ____ _____");
     // console.log("  /    /      \    \ ");
     // console.log("/____ /_________\____\ ");
@@ -42,7 +44,7 @@ var prompt = function(res) {
     inquirer
     .prompt({
         type: "input",
-        name: "purchase",
+        name: "userSays",
         message: "Hey did you see something you like? Please tell me the item ID! Type bye to leave, if you really want :("
     })
     
@@ -50,12 +52,12 @@ var prompt = function(res) {
         console.log(answer);
        // return
         var match = false;
-        var quit = answer.purchase;
+        var quit = answer.userSays;
         if (quit == "bye"){
             process.exit();
         }
         for (var i=0; i <res.length; i++) {
-            if (answer.purchase == res[i].item_id) {
+            if (answer.userSays == res[i].item_id) {
                 match = true;
                 var id = i;
                 inquirer
