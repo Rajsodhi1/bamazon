@@ -60,6 +60,8 @@ var prompt = function(res) {
             if (answer.userSays == res[i].item_id) {
                 match = true;
                 var id = i;
+                var itemId = i+1;
+
                 inquirer
                 .prompt({
                     type: "input",
@@ -75,11 +77,21 @@ var prompt = function(res) {
                     })
                     .then(function(answer) {
                         if((res[id].stock_quantity - answer.amount) > 0) {
-                            connection.query("UPDATE products SET stock_quantity ='" + (res[id].stock_quantity - answer.amount) +"' WHERE item_id = '"+id+"'",
-                            function(err, res2) {
-                                console.log("You got it, thanks!");
-                                openStore();
-                            })
+                            console.log(answer.amount);
+                            console.log(res[id].stock_quantity);
+                            connection.query(`SELECT price FROM products WHERE item_id = ${itemId}`, function(err, response2){
+                                if (err) console.log(err);
+                                console.log(response2);
+
+                                connection.query("UPDATE products SET stock_quantity ='" + (res[id].stock_quantity - answer.amount) +"' WHERE item_id = '"+itemId+"'",
+                                function(err, res3) {
+                                    var totalCost = answer.amount * response2[0].price;
+                                    console.log(`Your total cost today is: ${totalCost}`);
+                                    console.log("You got it, thanks!");
+                                    openStore();
+                                })
+                            } );
+
                         } else {
                             console.log("I'm so sorry that doesn't work!");
                             prompt(res);
